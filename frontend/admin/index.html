@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de Administración</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- Simplified background and modal for performance -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #4e73df 0%, #1cc88a 100%);
+      min-height: 100vh;
+    }
+    .sidebar {
+      box-shadow: 2px 0 6px rgba(0,0,0,0.3);
+    }
+    .content-wrapper {
+      background-color: rgba(255,255,255,0.85);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .modal-backdrop.show { opacity: 0.5; }
+    .modal-content { border-radius: 1rem; }
+    .modal-header { background-color: #4e73df; color: #fff; border-bottom: none; }
+    .modal-header .btn-close { filter: invert(1) brightness(2); }
+    .modal-body { background-color: #f8f9fa; }
+    .form-check-input { width: 1.3rem; height: 1.3rem; accent-color: #1cc88a; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><i class="fa fa-tools me-2"></i>Panel Admin</a>
+      <span class="text-white"><i class="fa fa-user-circle me-1"></i> Admin</span>
+    </div>
+  </nav>
+
+  <!-- LAYOUT -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block sidebar bg-dark">
+        <ul class="nav flex-column p-3">
+          <li class="nav-item mb-2"><a class="nav-link active" href="#"><i class="fa fa-boxes me-2"></i>Productos</a></li>
+          <li class="nav-item mb-2"><a class="nav-link" href="#"><i class="fa fa-chart-line me-2"></i>Reportes</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-cogs me-2"></i>Configuración</a></li>
+        </ul>
+      </nav>
+
+      <!-- MAIN CONTENT -->
+      <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 py-4">
+        <div class="content-wrapper">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="m-0 text-center flex-grow-1">Administración de Productos</h2>
+          </div>
+
+          <div class="mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalProducto" onclick="abrirFormulario()">
+              <i class="fa fa-plus me-1"></i> Nuevo Producto
+            </button>
+          </div>
+
+          <div class="table-responsive bg-white rounded shadow-sm p-3">
+            <table class="table table-bordered table-hover mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Autor</th>
+                  <th>Disponible</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyProductos"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- PRODUCTO MODAL -->
+  <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content" id="formProducto" onsubmit="guardarProducto(event)">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tituloModal">Nuevo Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="idProducto" />
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="titulo" required />
+          </div>
+          <div class="mb-3">
+            <label for="autor" class="form-label">Autor</label>
+            <input type="text" class="form-control" id="autor" required />
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="disponible" />
+            <label class="form-check-label" for="disponible">Disponible</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONFIRM DELETE MODAL -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Confirmar Eliminación</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Eliminar este producto?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // Custom delete confirmation using Bootstrap modal
+    const confirmModalEl = document.getElementById('confirmModal');
+    const confirmModal = new bootstrap.Modal(confirmModalEl);
+    let deleteId = null;
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+      if (deleteId !== null) {
+        const res = await fetch(`${apiUrl}/${deleteId}`, { method: 'DELETE' });
+        if (res.ok) {
+          await cargarProductos();
+        }
+      }
+      confirmModal.hide();
+      deleteId = null;
+    });
+    // Override eliminarProducto function
+    async function eliminarProducto(id) {
+      deleteId = id;
+      confirmModal.show();
+    }
+  </script>
+</body>
+</html>

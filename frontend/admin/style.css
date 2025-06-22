@@ -1,0 +1,73 @@
+
+/* Base background and text */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Title headers */
+h1, h2, h5 {
+  font-weight: bold;
+  color: #343a40;
+}
+
+/* Table improvements */
+.table th, .table td {
+  vertical-align: middle;
+  text-align: center;
+}
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Buttons */
+.btn {
+  font-size: 0.9rem;
+}
+.btn i {
+  margin-right: 4px;
+}
+
+/* Modal titles */
+.modal-title {
+  font-weight: bold;
+}
+
+/* Sidebar for admin layout */
+.sidebar {
+  height: 100vh;
+  background-color: #343a40;
+  padding-top: 1rem;
+}
+.sidebar .nav-link {
+  color: #ddd;
+  transition: background-color 0.3s, color 0.3s;
+}
+.sidebar .nav-link:hover {
+  background-color: #495057;
+  color: #fff;
+}
+.sidebar .nav-link.active {
+  background-color: #495057;
+  color: #fff;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .sidebar {
+    height: auto;
+  }
+  .sidebar .nav-link {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Card styles (optional for store layout) */
+.card img {
+  object-fit: cover;
+  height: 180px;
+}
+.card-body {
+  padding: 1rem;
+}

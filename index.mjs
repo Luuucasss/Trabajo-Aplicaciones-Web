@@ -17,7 +17,7 @@ app.use('/admin', express.static(path.join(__dirname, 'frontend/admin')));
 app.use('/tienda', express.static(path.join(__dirname, 'frontend/tienda')));
 
 
-app.use(rutasApi);   // <- ahora sí son routers válidos
+app.use(rutasApi);  
 app.use(rutasCrud);
 
 app.listen(PUERTO, () => {

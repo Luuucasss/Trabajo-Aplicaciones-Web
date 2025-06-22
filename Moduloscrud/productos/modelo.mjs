@@ -18,17 +18,22 @@ export async function traerUno(id) {
   }
 }
 
-export async function crearUno({ titulo, autor, disponible }) {
+export async function crearUno({ nombre, marca, precio, descripcion, imagen }) {
   try {
     const resultado = await pool.query(
-      'INSERT INTO productos (nombre,marca,precio,descripcion,imagen) VALUES ($1, $2, $3) RETURNING *',
-      [nombre,marca,precio,descripcion,imagen]
+      `INSERT INTO productos
+         (nombre, marca, precio, descripcion, imagen)
+       VALUES
+         ($1,      $2,    $3,     $4,          $5)
+       RETURNING *`,
+      [nombre, marca, precio, descripcion, imagen]
     );
     return resultado.rows[0];
   } catch (error) {
     throw new Error('Error al crear producto: ' + error.message);
   }
 }
+
 
 export async function actualizarUno(id, { nombre,marca,precio,descripcion,imagen }) {
   try {
